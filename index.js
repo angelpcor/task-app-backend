@@ -1,10 +1,13 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
+let cors = require('cors');
 const router = express.Router();
 
 const userRoutes = require('./routes/user.js');
 const taskRoutes = require('./routes/task.js');
+
+app.use(cors());
 
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({ extended: false }));
