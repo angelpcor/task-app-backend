@@ -3,7 +3,8 @@ let bodyParser = require('body-parser');
 let app = express();
 const router = express.Router();
 
-const Db = require('./db.js');
+const userRoutes = require('./routes/user.js');
+const taskRoutes = require('./routes/task.js');
 
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -12,13 +13,10 @@ app.use(bodyParser.json());
 // Send message for default URL
 app.get('/', (req, res) => res.send('Hello World with Express'));
 
-router.post('/createUser', (req, res) => {
-    let body = req.body;
-    console.log(body);
-    res.send(200);
-})
 
 app.use('/', router)
+app.use('/user', userRoutes)
+app.use('/task', taskRoutes)
 
 // Use Api routes in the App
 

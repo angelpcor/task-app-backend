@@ -24,6 +24,11 @@ Db.connect = function() {
     });
 }
 
+Db.executeSync = async function(query, params) {
+    let result = await Db.con.promise().query(query, params)
+    return result
+}
+
 Db.connect()
 
 module.exports = Db;
