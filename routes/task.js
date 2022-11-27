@@ -10,6 +10,14 @@ const User = require('../models/user.js');
 router.post('/getTasks', async (req, res) => {
     let body = req.body;
     let user = body.user;
+
+    if (user == null) {
+        res.status(400).json({
+            message: 'User is required'
+        });
+        return;
+    }
+        
     let password = user.password;
     let name = user.username;
 
@@ -44,6 +52,45 @@ router.post('/setCompleted', async (req, res) => {
 
         if (taskOwner == userObject.id) {
             let result = await Task.setCompleted(taskId, completed)
+            if (result) res.status(200).send({message: 'Task updated'})
+            else res.status(404).send({message: 'Task not found'})
+        } else {
+            res.status(404).send({message: 'Not owner'})
+        }
+    } else {
+        res.status(404).send({message: 'No user found'})
+    }
+})
+
+router.post("/editTask", async (req, res) => {
+    let body = req.body;
+    let user = body.user;
+
+    if (user == null) {
+        res.status(400).json({
+            message: 'User is required'
+        });
+        return;
+    }
+        
+    let password = user.password;
+    let name = user.username;
+    let taskId = body.task
+    let title = body.title
+    let description = body.description
+    
+    let userObject = await User.login(name, password);
+
+    if (userObject) {
+        let taskOwner = await Task.getOwner(taskId)
+
+        if (!taskOwner) {
+            res.status(404).send({message: 'No task found'})
+            return
+        }
+
+        if (taskOwner == userObject.id) {
+            let result = await Task.edit(taskId, title, description)
             if (result) res.status(200).send({message: 'Task updated'})
             else res.status(404).send({message: 'Task not found'})
         } else {

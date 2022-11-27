@@ -38,4 +38,10 @@ Task.getOwner = async function(id) {
     return result ? result.user_id : undefined
 }
 
+Task.edit = async function(id, title, description) {
+    let result = await Db.executeSync('UPDATE tasks SET title = ?, description = ? WHERE id = ?', [title, description, id])
+    result = result[0]
+    if (result.affectedRows > 0) return true
+}
+
 module.exports = Task

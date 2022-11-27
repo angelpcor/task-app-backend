@@ -27,7 +27,7 @@ router.post('/createUser', async (req, res) => {
     let picture = body.picture;
 
     if (!username || !password || !picture) {
-        res.send(300, { message: 'Username or password or picture is missing' }) 
+        res.status(300).send({ message: 'Username or password or picture is missing' }) 
         return
     }
 
